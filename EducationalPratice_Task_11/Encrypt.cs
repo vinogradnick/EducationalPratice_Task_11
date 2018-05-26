@@ -1,16 +1,19 @@
 ﻿using System;
 using System.CodeDom;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace EducationPratice_Task_11
 {
-    class Encrypt
+   public class Encrypt
     {
+        /// <summary>
+        /// Входная строка
+        /// </summary>
         private string InputString { get; set; }
-
         private const int MatrixLength = 5;//Размерность кодируемой матрицы
         private int[,] matrix;
-        private int[] keys;
+        private List<int[]> keysList= new List<int[]>();
         private static Random rd= new Random();
 
         /// <summary>
@@ -22,17 +25,16 @@ namespace EducationPratice_Task_11
             InputString = text;//Входная строка
             matrix = new int[MatrixLength, MatrixLength];//Матрица для шифрования
         }
-        
         /// <summary>
         /// Генерация массива ключей для поиска
         /// </summary>
         /// <returns></returns>
-        static int[] keyGenerate()
+        public int[] keyGenerate()
         {
             int[] keys = new int[MatrixLength];
             for (int i = 0; i < keys.Length; i++)
                 keys[i] = rd.Next(25);
-
+            keysList.Add(keys);
             return keys;
         }
         /// <summary>
@@ -41,13 +43,13 @@ namespace EducationPratice_Task_11
         /// <param name="array">матрица для шифрования</param>
         /// <param name="key">массив ключей для шифрования данного массива</param>
         /// <returns></returns>
-        static int[] keyFill(int[,] array,int[]key)
+        static int[,] keyFill(int[,] array,int[]key)
         {
             for (int i = 0; i < array.GetLength(1); i++)
             for (int j = 0; j < array.GetLength(0); j++)
                 if (key[j] == array[i, j])
                     array[i, j] = 0;
-
+            return array;
         }
         /// <summary>
         /// Поворот матрицы на 90 градусов
@@ -63,6 +65,35 @@ namespace EducationPratice_Task_11
                 rotated_matrix[i, j] = matrix[matrix.GetLength(0) - j - 1, i];
             return rotated_matrix;
         }
+
+        /// <summary>
+        /// Заполнение матрицы
+        /// </summary>
+        /// <param name="a">входной массив</param>
+        /// <param name="size">Размер матрицы</param>
+        static void FillMatrix(int[,] matrix,string word)
+        {
+            int counter = 0;
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            for (int j = 0; j < matrix.GetLength(1); j++)
+                matrix[i, j] = word[counter++];
+        }
+        /// <summary>
+        /// Печать матрицы
+        /// </summary>
+        /// <param name="matrix">входная матрица</param>
+        static void PrintMatrix(char[,] matrix)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                    Console.Write($" {matrix[i, j],2} ");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine();
+        }
+
     }
 
 }
