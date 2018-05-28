@@ -83,7 +83,8 @@ namespace EducationPratice_Task_11
         static void Main(string[] args)
         {
             Encrypt encrypt = new Encrypt("ГоворяодругихизмененияхвгеймплееРибарицотметилтотеперьвигрепоявитсявозможностьрукопашногобоятвылфвты");
-            encrypt.
+            encrypt.Encryption();
+            Console.ReadLine();
         }
     }
 }
