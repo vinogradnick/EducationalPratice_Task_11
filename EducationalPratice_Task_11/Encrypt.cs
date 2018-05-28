@@ -47,6 +47,7 @@ namespace EducationPratice_Task_11
 
         public string[,] FillCharMatrix(string[,] array)
         {
+            int count = 0;
             for (int i = 0; i < array.GetLength(1); i++)
             for (int j = 0; j < array.GetLength(0); j++)
             {
@@ -56,10 +57,12 @@ namespace EducationPratice_Task_11
                 {
                     array[i, j] = InputString[StringNumerator].ToString();
                     StringNumerator++;
+                    Console.WriteLine(StringNumerator+" "+ array[i,j]);
+                    count++;
                 }
             }
-            Console.WriteLine(StringNumerator);
-
+            Console.WriteLine();
+            Console.WriteLine(count);
             return array;
         }
         public void Encryption()
@@ -75,8 +78,13 @@ namespace EducationPratice_Task_11
             keyTable.KeyTableFill(key);//Заполнение таблицы ключами
             Console.WriteLine();
             string[,] round1 = FillCharMatrix(keyTable.toStringTable());
+            Console.WriteLine("2");
             string[,] round2 = FillCharMatrix(keyTable.RotateMatrix().toStringTable());
+            Console.WriteLine("3");
+
             string[,] round3 = FillCharMatrix(keyTable.RotateMatrix().RotateMatrix().toStringTable());
+            Console.WriteLine("4");
+
             string[,] round4 = FillCharMatrix(keyTable.RotateMatrix().RotateMatrix().RotateMatrix().toStringTable());
 
             
