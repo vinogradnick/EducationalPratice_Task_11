@@ -15,6 +15,7 @@ namespace EducationPratice_Task_11
         private List<string[,]> EncryptionTable { get; set; }
         private int MatrixLength;
         private List<int> key;
+        private int StringNumerator = 0;
         private Random rd = new Random();
         /// <summary>
         /// Конструктор класса
@@ -37,15 +38,57 @@ namespace EducationPratice_Task_11
                     number = rd.Next(1,100);
                 key.Add(number);
             }
+
+            foreach (int item in key)
+            {
+                Console.Write($"{item}-");
+            }
+        }
+
+        public string[,] FillCharMatrix(string[,] array)
+        {
+            for (int i = 0; i < array.GetLength(1); i++)
+            for (int j = 0; j < array.GetLength(0); j++)
+            {
+                int number = -1;
+                bool status = int.TryParse(array[i, j], out number);
+                if (status && number == 0)
+                {
+                    array[i, j] = InputString[StringNumerator].ToString();
+                    StringNumerator++;
+                }
+            }
+            Console.WriteLine(StringNumerator);
+
+            return array;
         }
         public void Encryption()
         {
-            int[,]table = new int[MatrixLength,MatrixLength];
-            table.Fill();
-            PrintMatrix(table);
-            KeyGen();
-            table.KeyTableFill(key);
-            PrintMatrix(table);
+            int[,]keyTable = new int[MatrixLength,MatrixLength];
+
+            keyTable.Fill();//Заполнение таблицы
+
+            PrintMatrix(keyTable);//Печать матрицы
+
+            KeyGen();//Генерация ключа
+
+            keyTable.KeyTableFill(key);//Заполнение таблицы ключами
+            Console.WriteLine();
+            string[,] round1 = FillCharMatrix(keyTable.toStringTable());
+            string[,] round2 = FillCharMatrix(keyTable.RotateMatrix().toStringTable());
+            string[,] round3 = FillCharMatrix(keyTable.RotateMatrix().RotateMatrix().toStringTable());
+            string[,] round4 = FillCharMatrix(keyTable.RotateMatrix().RotateMatrix().RotateMatrix().toStringTable());
+
+            
+            PrintMatrix(round1);
+            PrintMatrix(round2);
+            PrintMatrix(round3);
+            PrintMatrix(round4);
+            Console.WriteLine("Соеденение массивов");
+
+            round1.ConcatTable(round2).ConcatTable(round3).ConcatTable(round4);
+            
+            PrintMatrix(round1);
 
 
         }
@@ -54,21 +97,7 @@ namespace EducationPratice_Task_11
    
 
 
-        /// <summary>
-        /// Поворот матрицы на 90 градусов
-        /// </summary>
-        /// <param name="matrix">входая матрица для поворота</param>
-        /// <returns>матрица повернутая на 90 градусов</returns>
-        static int[,] RotateMatrix(int[,] matrix)
-        {
-            int[,] rotated_matrix = new int[matrix.GetLength(1), matrix.GetLength(0)];//Перевернутая матрица
-
-            for (int i = 0; i < matrix.GetLength(1); i++)
-            for (int j = 0; j < matrix.GetLength(0); j++)
-                rotated_matrix[i, j] = matrix[matrix.GetLength(0) - j - 1, i];
-            return rotated_matrix;
-        }
-
+      
      
     
         /// <summary>
@@ -97,6 +126,7 @@ namespace EducationPratice_Task_11
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
         }
 
     }
@@ -118,7 +148,7 @@ namespace EducationPratice_Task_11
 
             return array;
         }
-
+        
         public static int[,] KeyTableFill(this int[,]array, List<int> key)
         {
             for (int i = 0; i < array.GetLength(1); i++)
@@ -129,23 +159,69 @@ namespace EducationPratice_Task_11
             return array;
         }
 
-        public static string[,] ConcatTables(this string[,] first, int[,] second)
+       
+       
+
+        public static string[,] ConcatTable(this string[,] first, string[,] second)
         {
             for (int i = 0; i < first.GetLength(1); i++)
-            {
-                for (int j = 0; j < first.GetLength(0); j++)
-                {
-                    int number = -1;
-
-                    bool status = int.TryParse(first[i,j], out number);
-                    if (status && number == second[i, j])
-                        first[i, j] = "0";
-                }
-            }
+            for (int j = 0; j < first.GetLength(0); j++)
+                if(first[i, j].Check()==true && Check(second[i, j])==false)
+                    first[i, j] = second[i, j];
 
             return first;
         }
-       
+
+        public static bool Check(this string text)
+        {
+            int number = -1;
+            return int.TryParse(text, out number);
+        }
+        public static string[,] CopyTable(this string[,] array, int[,] matrix)
+        {
+            for (int i = 0; i < array.GetLength(1); i++)
+            for (int j = 0; j < array.GetLength(0); j++)
+                array[i, j] = matrix[i, j].ToString();
+
+            return array;
+        }
+
+        /// <summary>
+        /// Поворот матрицы на 90 градусов
+        /// </summary>
+        /// <param name="matrix">входая матрица для поворота</param>
+        /// <returns>матрица повернутая на 90 градусов</returns>
+        public static int[,] RotateMatrix(this int[,] matrix)
+        {
+            int[,] rotated_matrix = new int[matrix.GetLength(1), matrix.GetLength(0)];//Перевернутая матрица
+
+            for (int i = 0; i < matrix.GetLength(1); i++)
+            for (int j = 0; j < matrix.GetLength(0); j++)
+                rotated_matrix[i, j] = matrix[matrix.GetLength(0) - j - 1, i];
+            return rotated_matrix;
+        }
+        public static string[,] RotateMatrix(this string[,] matrix)
+        {
+            string[,] rotated_matrix = new string[matrix.GetLength(1), matrix.GetLength(0)];//Перевернутая матрица
+
+            for (int i = 0; i < matrix.GetLength(1); i++)
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                    rotated_matrix[i, j] = matrix[matrix.GetLength(0) - j - 1, i];
+            return rotated_matrix;
+        }
+
+        public static string[,] toStringTable(this int[,] table)
+        {
+            string[,] temp= new string[table.GetLength(1),table.GetLength(0)];
+            for (int i = 0; i < temp.GetLength(1); i++)
+            {
+                for (int j = 0; j < temp.GetLength(0); j++)
+                    temp[i, j] = table[i, j].ToString();
+            }
+
+            return temp;
+        }
+
     }
 
 }
