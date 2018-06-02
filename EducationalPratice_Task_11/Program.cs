@@ -24,67 +24,20 @@ namespace EducationPratice_Task_11
     */
     class Program
     {
+
        
-        
 
-        static void IncMatrix(char[,] defaut)
-        {
-           
-            /* Необходимо объеденить 4 матрицы в 1 выходную матрицу */
-
-            //#region FillMatrix
-
-            //try
-            //{
-            //    for (int i = 0; i < defaut.GetLength(1); i++)
-            //    for (int j = 0; j < defaut.GetLength(0); j++)
-            //        temp[i, j] = defaut[i, j];
-            //    PrintMatrix(temp);
-
-            //    //Заполнение 2 матрицы справа
-            //    for (int i = defaut.GetLength(1); i < defaut.GetLength(1) * 2; i++)
-            //    {
-            //        for (int j = 0; j < right.GetLength(0); j++)
-            //        {
-            //            temp[i, j] = right[i - defaut.GetLength(1), j];
-            //        }
-            //    }
-
-            //    PrintMatrix(temp);
-            //    //Заполнение 3 матрицы снизу
-            //    for (int i = 0; i < defaut.GetLength(1); i++)
-            //    for (int j = defaut.GetLength(0); j < defaut.GetLength(0) + down.GetLength(0); j++)
-            //        temp[i, j] = down[i, j - defaut.GetLength(0)];
-            //    PrintMatrix(temp);
-            //    //Заполнение 4 матрицы справа снизу
-            //    for (int i = defaut.GetLength(1); i < defaut.GetLength(1) + down_right.GetLength(1); i++)
-            //    for (int j = defaut.GetLength(0); j < defaut.GetLength(0) + down_right.GetLength(0); j++)
-            //        temp[i, j] = down_right[i - defaut.GetLength(1), j - defaut.GetLength(0)];
-            //    PrintMatrix(temp);
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-
-            //}
-            ////Заполнение 1 матрицы 
-
-            //#endregion
-
-            Console.WriteLine("Выходная матрица ");
-        }
-
-        private static Random random = new Random();
-
-        static int[,] FillKeyMatrix(int[,] matrix)
-        {
-            return matrix;
-        }
+  
         static void Main(string[] args)
         {
             Encrypt encrypt = new Encrypt("ГоворяодругихизмененияхвгеймплееРибарицотметилтотеперьвигрепоявитсявозможностьрукопашногобоятвылфвты");
             encrypt.Encryption();
+            
+            Encrypt decrypt = new Encrypt(encrypt.OutputTable,encrypt.EncryptKey);
+            Console.WriteLine(decrypt.Decrypt());
             Console.ReadLine();
         }
+
     }
+   
 }
